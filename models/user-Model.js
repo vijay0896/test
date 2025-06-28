@@ -21,20 +21,23 @@ const getuserDetails = async (userId) => {
 
 }
 const upDatePassword = async (userId, password) => {
-    const [result] = await db.query(`UPADTE users SET password=?,rest_token=NULL, reset_token_exp=NULL WHERE id=?`, [password, userId])
+    const [result] = await db.query(`UPDATE users SET password=?,rest_token=NULL, reset_token_exp=NULL WHERE id=?`, [password, userId])
     return result;
 
 
 }
 
 const restToken = async (userId, token, expiryTime) => {
-    const [result] = await db.query(`UPADTE users SET rest_token=?, reset_token_exp=? WHERE id=?`, [userId, token, expiryTime])
+    const [result] = await db.query(
+        `UPDATE users SET rest_token=?, reset_token_exp=? WHERE id=?`,
+        [token, expiryTime, userId]
+    );
     return result;
 
 }
-const getUserByresetToken=async(token)=>{
-    const[rows]=await db.query(`SELECT * from user WHERE rest_token=? `,[token])
+const getUserByresetToken = async (token) => {
+    const [rows] = await db.query(`SELECT * from users WHERE rest_token=? `, [token])
     return rows[0];
 
 }
-module.exports = { CreateUser, getUserByEmail, getuserDetails, upDatePassword , restToken,getUserByresetToken}
+module.exports = { CreateUser, getUserByEmail, getuserDetails, upDatePassword, restToken, getUserByresetToken }
